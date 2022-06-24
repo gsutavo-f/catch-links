@@ -1,5 +1,10 @@
 import chalk from 'chalk';
+import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Função para executar o readFile da biblioteca fs
@@ -56,15 +61,32 @@ function readFileUsingPromises(filePath) {
 }
 
 /**
- * Função que executa o fs.readFile usando as notações async e await
+ * Função que retorna links e suas chaves extraídos de um texto
+ * @param text
+ */
+function extractLinks(text) {
+    const regex = /\[([^\]]*)\]\((https?:\/\/[^$#\s].\S*)\)/gm;
+    const resultsArray = [];
+    let temp = regex.exec(text);
+    for (temp; temp !== null; temp = regex.exec(text)) {
+        resultsArray.push({[temp[1]]: temp[2]});
+    }
+    return resultsArray.length === 0
+        ? 'No links found :('
+        : resultsArray;
+}
+
+/**
+ * Função que retorna os links extraídos de um arquivo markDown
+ * usando async e await
+ * @returns {Promise<string|*[]>}
  * @param filePath
- * @returns {Promise<void>}
  */
 async function readFilesUsingAsyncAwait(filePath) {
     const encoding = 'utf-8';
     try {
         const result = await fs.promises.readFile(filePath, encoding);
-        console.log(extractLinks(result));
+        return extractLinks(result);
     } catch (err) {
         errorHandling(err);
     } finally {
@@ -73,17 +95,26 @@ async function readFilesUsingAsyncAwait(filePath) {
 }
 
 /**
- * Função que retorna links e suas chaves extraídos de um texto
- * @param text
+ * Função que retorna todos os links extraídos de arquivos markdown
+ * presentes num diretório
+ * @param dirPath
+ * @returns {Promise<Awaited<string|[]>[]>}
  */
-function extractLinks(text) {
-    const regex = /\[([^\]]*)\]\((https?:\/\/[^$#\s].\S*)\)/gm;
-    const resultsArray = [];
-    let temp = regex.exec(text);
-    for(temp; temp !== null; temp = regex.exec(text)) {
-        resultsArray.push({ [temp[1]] : temp[2] });
+export async function readFilesFromDirectory(dirPath) {
+    const absolutePath = path.join(__dirname, '/', dirPath);
+    const encoding = 'utf-8';
+    try {
+        const files = await fs.promises.readdir(absolutePath, {encoding});
+        return await Promise.all(files.map(async (file) => {
+            const filePath = `${absolutePath}/${file}`;
+            const text = await fs.promises.readFile(filePath, encoding);
+            return extractLinks(text);
+        }));
+    } catch (err) {
+        errorHandling(err);
+    } finally {
+        console.log(chalk.yellow('Operation Completed'))
     }
-    return resultsArray;
 }
 
-readFilesUsingAsyncAwait('./files/texto1.md');
+export {readFilesUsingAsyncAwait}
