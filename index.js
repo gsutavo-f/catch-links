@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,10 +39,10 @@ function callBackFunctionWithErrorHandling(err, data) {
 
 /**
  * Função para lançar erro
- * @param err
+ * @param error
  */
-function errorHandling(err) {
-    throw new Error(chalk.red.bold(err));
+function errorHandling(error) {
+    throw new Error(chalk.red.bold(error));
 }
 
 /**
