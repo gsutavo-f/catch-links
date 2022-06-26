@@ -20,4 +20,12 @@ describe('readFilesUsingAsyncAwait::', () => {
          'test/files/texto2.md');
       expect(result).toBe('No links found :(');
    });
+   it('must throw error "illegal operation on a directory"', async () => {
+      await expect(readFilesUsingAsyncAwait('C:/Users/gu_fe/Desktop/programs/node/lib_markdown/test/files'))
+         .rejects.toThrow(/illegal operation on a directory/);
+   });
+   it('must resolve function with success', async () => {
+      await expect(readFilesUsingAsyncAwait('C:/Users/gu_fe/Desktop/programs/node/lib_markdown/test/files/texto1.md'))
+         .resolves.toEqual(arrayResult);
+   })
 });
