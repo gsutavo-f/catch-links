@@ -39,7 +39,7 @@ async function getStatusArray(arrayURLs) {
 }
 
 /**
- * Função retorna array de objeto que mostra os links e o statua de suas respostas
+ * Função retorna array de objeto que mostra os links e o status de suas respostas
  * @param arrayLinks
  * @returns {*}
  */

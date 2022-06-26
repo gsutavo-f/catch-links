@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./test",
-    "cli": "node cli.js ./files/texto1.md"
+    "cli": "node scripts/cli.js ./files/texto1.md"
   },
   "keywords": [],
   "author": "",

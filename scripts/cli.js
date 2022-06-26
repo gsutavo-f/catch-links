@@ -1,4 +1,4 @@
-import {readFilesFromDirectory, readFilesUsingAsyncAwait} from './index.js';
+import {readFilesFromDirectory, readFilesUsingAsyncAwait} from '../index.js';
 import {validateURLs} from './validate-http.js';
 import chalk from 'chalk';
 
